@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2c3e50">
+    <title>FitTrack - Профиль</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-profile">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="page-header">
+            <button class="btn-back" onclick="history.back()">←</button>
+            <h1>Профиль</h1>
+            <button class="btn-icon" onclick="saveProfile()">✓</button>
+        </header>
+
+        <!-- Profile Card -->
+        <section class="profile-card">
+            <div class="avatar-section">
+                <div class="avatar-large" id="userAvatar">
+                    <span>👤</span>
+                    <button class="avatar-edit" onclick="changeAvatar()">📷</button>
+                </div>
+                <h2 id="profileName">Атлет</h2>
+                <p class="profile-level">Уровень 5 • 12,450 XP</p>
+            </div>
+            <div class="level-progress">
+                <div class="level-bar">
+                    <div class="level-fill" style="width: 65%"></div>
+                </div>
+                <span>6500 / 10000 XP до следующего уровня</span>
+            </div>
+        </section>
+
+        <!-- Personal Info -->
+        <section class="settings-section">
+            <h3>Личные данные</h3>
+            <div class="form-group">
+                <label>Имя</label>
+                <input type="text" id="settingsName" placeholder="Ваше имя">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Возраст</label>
+                    <input type="number" id="settingsAge" placeholder="25">
+                </div>
+                <div class="form-group">
+                    <label>Вес (кг)</label>
+                    <input type="number" id="settingsWeight" placeholder="70">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Рост (см)</label>
+                    <input type="number" id="settingsHeight" placeholder="175">
+                </div>
+                <div class="form-group">
+                    <label>Пол</label>
+                    <select id="settingsGender">
+                        <option value="male">Мужской</option>
+                        <option value="female">Женский</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals Settings -->
+        <section class="settings-section">
+            <h3>Цели</h3>
+            <div class="goal-setting">
+                <div class="goal-info">
+                    <span class="goal-icon">👟</span>
+                    <div>
+                        <label>Шагов в день</label>
+                        <input type="number" id="goalSteps" value="10000">
+                    </div>
+                </div>
+            </div>
+            <div class="goal-setting">
+                <div class="goal-info">
+                    <span class="goal-icon">🔥</span>
+                    <div>
+                        <label>Калорий в день</label>
+                        <input type="number" id="goalCalories" value="500">
+                    </div>
+                </div>
+            </div>
+            <div class="goal-setting">
+                <div class="goal-info">
+                    <span class="goal-icon">⏱️</span>
+                    <div>
+                        <label>Минут активности</label>
+                        <input type="number" id="goalTime" value="60">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- App Settings -->
+        <section class="settings-section">
+            <h3>Настройки приложения</h3>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-icon">🔔</span>
+                    <div>
+                        <span class="setting-title">Уведомления</span>
+                        <span class="setting-desc">Напоминания о тренировках</span>
+                    </div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" id="settingNotifications" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-icon">🔊</span>
+                    <div>
+                        <span class="setting-title">Звуковые сигналы</span>
+                        <span class="setting-desc">При достижении целей</span>
+                    </div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" id="settingSound" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-icon">🌙</span>
+                    <div>
+                        <span class="setting-title">Тёмная тема</span>
+                        <span class="setting-desc">Переключить оформление</span>
+                    </div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" id="settingDarkMode">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-icon">📏</span>
+                    <div>
+                        <span class="setting-title">Единицы измерения</span>
+                        <span class="setting-desc">Метрическая / Имперская</span>
+                    </div>
+                </div>
+                <select id="settingUnits">
+                    <option value="metric">Метрическая (км, кг)</option>
+                    <option value="imperial">Имперская (мили, фунты)</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Data Management -->
+        <section class="settings-section">
+            <h3>Данные</h3>
+            <button class="setting-btn" onclick="exportData()">
+                <span>📤</span>
+                <span>Экспорт данных</span>
+            </button>
+            <button class="setting-btn" onclick="importData()">
+                <span>📥</span>
+                <span>Импорт данных</span>
+            </button>
+            <button class="setting-btn danger" onclick="clearAllData()">
+                <span>🗑️</span>
+                <span>Удалить все данные</span>
+            </button>
+        </section>
+
+        <!-- App Info -->
+        <section class="app-info">
+            <p>FitTrack v1.0.0</p>
+            <p>© 2026 Все права защищены</p>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </a>
+            <a href="activity.html" class="nav-item">
+                <span class="nav-icon">👟</span>
+                <span class="nav-label">Активность</span>
+            </a>
+            <a href="notes.html" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Заметки</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Задачи</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Статистика</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initProfilePage();
+        });
+    </script>
+</body>
+</html>

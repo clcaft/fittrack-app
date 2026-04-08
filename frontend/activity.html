@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#11998e">
+    <title>FitTrack - Активность</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="page-header">
+            <button class="btn-back" onclick="history.back()">←</button>
+            <h1>Трекер активности</h1>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="toggleSound()">🔊</button>
+            </div>
+        </header>
+
+        <!-- Status Bar -->
+        <div class="status-bar" id="activityStatus">
+            <div class="status-badge" id="statusBadge">
+                <span class="status-dot"></span>
+                <span>Готов к старту</span>
+            </div>
+            <div class="session-timer" id="timer">00:00:00</div>
+        </div>
+
+        <!-- Main Counter -->
+        <section class="counter-section">
+            <div class="main-counter">
+                <div class="counter-ring">
+                    <svg viewBox="0 0 200 200">
+                        <circle class="counter-bg" cx="100" cy="100" r="90"/>
+                        <circle class="counter-fill" id="stepRing" cx="100" cy="100" r="90"/>
+                    </svg>
+                    <div class="counter-content">
+                        <span class="counter-value" id="steps">0</span>
+                        <span class="counter-label">шагов</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Metrics -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">🔥</div>
+                <div class="metric-value" id="calories">0</div>
+                <div class="metric-label">Ккал</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📏</div>
+                <div class="metric-value" id="distance">0.00</div>
+                <div class="metric-label">Километров</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">⚡</div>
+                <div class="metric-value" id="pace">0</div>
+                <div class="metric-label">Шаг/мин</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🎯</div>
+                <div class="metric-value" id="accuracy">--</div>
+                <div class="metric-label">Точность</div>
+            </div>
+        </section>
+
+        <!-- Activity Graph -->
+        <section class="graph-section">
+            <div class="section-header">
+                <h3>Интенсивность</h3>
+                <span class="activity-type" id="activityType">Ожидание</span>
+            </div>
+            <div class="graph-container">
+                <canvas id="activityCanvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Activity Types -->
+        <section class="activity-types">
+            <h3>Тип активности</h3>
+            <div class="type-selector">
+                <button class="type-btn active" data-type="walk">
+                    <span>🚶</span>
+                    <span>Ходьба</span>
+                </button>
+                <button class="type-btn" data-type="run">
+                    <span>🏃</span>
+                    <span>Бег</span>
+                </button>
+                <button class="type-btn" data-type="cycle">
+                    <span>🚴</span>
+                    <span>Велосипед</span>
+                </button>
+                <button class="type-btn" data-type="hike">
+                    <span>🥾</span>
+                    <span>Поход</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Control Buttons -->
+        <section class="control-section">
+            <button class="btn-control btn-start" id="startBtn" onclick="startTracking()">
+                <span class="btn-icon-large">▶</span>
+                <span>СТАРТ</span>
+            </button>
+            <button class="btn-control btn-pause hidden" id="pauseBtn" onclick="pauseTracking()">
+                <span class="btn-icon-large">⏸</span>
+                <span>ПАУЗА</span>
+            </button>
+            <button class="btn-control btn-stop hidden" id="stopBtn" onclick="stopTracking()">
+                <span class="btn-icon-large">⏹</span>
+                <span>СТОП</span>
+            </button>
+            <button class="btn-control btn-reset" id="resetBtn" onclick="resetTracking()">
+                <span>🔄</span>
+                <span>Сброс</span>
+            </button>
+        </section>
+
+        <!-- Permission Modal -->
+        <div class="modal" id="permissionModal">
+            <div class="modal-content">
+                <div class="modal-icon">📱</div>
+                <h3>Доступ к сенсорам</h3>
+                <p>Для подсчета шагов необходим доступ к акселерометру устройства</p>
+                <button class="btn-primary" onclick="requestPermission()">Разрешить</button>
+                <button class="btn-secondary" onclick="closeModal()">Отмена</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </a>
+            <a href="activity.html" class="nav-item active">
+                <span class="nav-icon">👟</span>
+                <span class="nav-label">Активность</span>
+            </a>
+            <a href="notes.html" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Заметки</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Задачи</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Статистика</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initActivityPage();
+        });
+    </script>
+</body>
+</html>

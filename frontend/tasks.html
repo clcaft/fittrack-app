@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#e74c3c">
+    <title>FitTrack - Задачи</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-tasks">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="page-header">
+            <button class="btn-back" onclick="history.back()">←</button>
+            <h1>Задачи</h1>
+            <button class="btn-icon" onclick="openTaskModal()">+</button>
+        </header>
+
+        <!-- Progress Overview -->
+        <section class="tasks-overview">
+            <div class="overview-card">
+                <div class="overview-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="completedTasks">0</span>
+                        <span class="stat-label">Выполнено</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <span class="stat-number" id="pendingTasks">0</span>
+                        <span class="stat-label">Осталось</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tasksProgress" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="tasksProgressText">0% выполнено</p>
+            </div>
+        </section>
+
+        <!-- Filter Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="filterTasks('all')">Все</button>
+            <button class="tab-btn" onclick="filterTasks('today')">Сегодня</button>
+            <button class="tab-btn" onclick="filterTasks('week')">Неделя</button>
+            <button class="tab-btn" onclick="filterTasks('completed')">Выполненные</button>
+        </div>
+
+        <!-- Tasks List -->
+        <section class="tasks-section">
+            <div class="tasks-list" id="tasksList">
+                <!-- Tasks will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="emptyTasks">
+            <span class="empty-icon">✅</span>
+            <h3>Нет задач</h3>
+            <p>Добавьте свою первую задачу</p>
+            <button class="btn-primary" onclick="openTaskModal()">Добавить</button>
+        </div>
+
+        <!-- Add/Edit Task Modal -->
+        <div class="modal" id="taskModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="taskModalTitle">Новая задача</h3>
+                    <button class="btn-close" onclick="closeTaskModal()">×</button>
+                </div>
+                <form id="taskForm" onsubmit="saveTask(event)">
+                    <input type="hidden" id="taskId">
+                    <div class="form-group">
+                        <label>Название задачи</label>
+                        <input type="text" id="taskTitle" required placeholder="Например: Пробежка 5км">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Категория</label>
+                            <select id="taskCategory">
+                                <option value="sport">Спорт</option>
+                                <option value="nutrition">Питание</option>
+                                <option value="sleep">Сон</option>
+                                <option value="water">Вода</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Приоритет</label>
+                            <select id="taskPriority">
+                                <option value="low">Низкий</option>
+                                <option value="medium" selected>Средний</option>
+                                <option value="high">Высокий</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Дата</label>
+                            <input type="date" id="taskDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Время</label>
+                            <input type="time" id="taskTime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание (необязательно)</label>
+                        <textarea id="taskDescription" rows="3" placeholder="Дополнительные детали..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeTaskModal()">Отмена</button>
+                        <button type="submit" class="btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </a>
+            <a href="activity.html" class="nav-item">
+                <span class="nav-icon">👟</span>
+                <span class="nav-label">Активность</span>
+            </a>
+            <a href="notes.html" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Заметки</span>
+            </a>
+            <a href="tasks.html" class="nav-item active">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Задачи</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Статистика</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initTasksPage();
+        });
+    </script>
+</body>
+</html>

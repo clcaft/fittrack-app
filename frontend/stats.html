@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#3498db">
+    <title>FitTrack - Статистика</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-stats">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="page-header">
+            <button class="btn-back" onclick="history.back()">←</button>
+            <h1>Статистика</h1>
+            <button class="btn-icon" onclick="exportData()">📤</button>
+        </header>
+
+        <!-- Period Selector -->
+        <div class="period-selector">
+            <button class="period-btn" data-period="day">День</button>
+            <button class="period-btn active" data-period="week">Неделя</button>
+            <button class="period-btn" data-period="month">Месяц</button>
+            <button class="period-btn" data-period="year">Год</button>
+        </div>
+
+        <!-- Summary Cards -->
+        <section class="summary-section">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon">👟</div>
+                    <div class="summary-data">
+                        <span class="summary-value" id="totalSteps">0</span>
+                        <span class="summary-label">Всего шагов</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">🔥</div>
+                    <div class="summary-data">
+                        <span class="summary-value" id="totalCalories">0</span>
+                        <span class="summary-label">Ккал сожжено</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">📏</div>
+                    <div class="summary-data">
+                        <span class="summary-value" id="totalDistance">0</span>
+                        <span class="summary-label">Километров</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">⏱️</div>
+                    <div class="summary-data">
+                        <span class="summary-value" id="totalTime">0</span>
+                        <span class="summary-label">Часов активности</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Chart -->
+        <section class="chart-section">
+            <div class="section-header">
+                <h3>Активность</h3>
+                <select class="chart-metric" id="chartMetric">
+                    <option value="steps">Шаги</option>
+                    <option value="calories">Калории</option>
+                    <option value="distance">Дистанция</option>
+                </select>
+            </div>
+            <div class="chart-container large">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Activity Distribution -->
+        <section class="stats-section">
+            <h3>Распределение активности</h3>
+            <div class="distribution-chart">
+                <div class="dist-item">
+                    <div class="dist-bar">
+                        <div class="dist-fill" style="width: 45%; background: #2ecc71;"></div>
+                    </div>
+                    <div class="dist-info">
+                        <span class="dist-label">🚶 Ходьба</span>
+                        <span class="dist-value">45%</span>
+                    </div>
+                </div>
+                <div class="dist-item">
+                    <div class="dist-bar">
+                        <div class="dist-fill" style="width: 30%; background: #3498db;"></div>
+                    </div>
+                    <div class="dist-info">
+                        <span class="dist-label">🏃 Бег</span>
+                        <span class="dist-value">30%</span>
+                    </div>
+                </div>
+                <div class="dist-item">
+                    <div class="dist-bar">
+                        <div class="dist-fill" style="width: 15%; background: #9b59b6;"></div>
+                    </div>
+                    <div class="dist-info">
+                        <span class="dist-label">🚴 Велосипед</span>
+                        <span class="dist-value">15%</span>
+                    </div>
+                </div>
+                <div class="dist-item">
+                    <div class="dist-bar">
+                        <div class="dist-fill" style="width: 10%; background: #e74c3c;"></div>
+                    </div>
+                    <div class="dist-info">
+                        <span class="dist-label">🏋️ Силовая</span>
+                        <span class="dist-value">10%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section class="achievements-section">
+            <h3>🏆 Достижения</h3>
+            <div class="achievements-grid">
+                <div class="achievement-card unlocked">
+                    <div class="achievement-icon">🥇</div>
+                    <div class="achievement-name">Первые шаги</div>
+                    <div class="achievement-desc">1000 шагов за день</div>
+                </div>
+                <div class="achievement-card unlocked">
+                    <div class="achievement-icon">🔥</div>
+                    <div class="achievement-name">Марафонец</div>
+                    <div class="achievement-desc">3 задачи выполнены</div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">⭐</div>
+                    <div class="achievement-name">Неделя активности</div>
+                    <div class="achievement-desc">7 дней подряд</div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">💎</div>
+                    <div class="achievement-name">Мастер</div>
+                    <div class="achievement-desc">100,000 шагов</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weekly Stats Table -->
+        <section class="table-section">
+            <h3>Детализация</h3>
+            <div class="stats-table">
+                <div class="table-header">
+                    <span>День</span>
+                    <span>Шаги</span>
+                    <span>Ккал</span>
+                    <span>Км</span>
+                </div>
+                <div class="table-body" id="statsTableBody">
+                    <!-- Data will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </a>
+            <a href="activity.html" class="nav-item">
+                <span class="nav-icon">👟</span>
+                <span class="nav-label">Активность</span>
+            </a>
+            <a href="notes.html" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Заметки</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Задачи</span>
+            </a>
+            <a href="stats.html" class="nav-item active">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Статистика</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initStatsPage();
+        });
+    </script>
+</body>
+</html>

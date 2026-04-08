@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#9b59b6">
+    <title>FitTrack - Заметки</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-notes">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="page-header">
+            <button class="btn-back" onclick="history.back()">←</button>
+            <h1>Заметки</h1>
+            <button class="btn-icon" onclick="openNoteModal()">+</button>
+        </header>
+
+        <!-- Search -->
+        <div class="search-bar">
+            <input type="text" id="noteSearch" placeholder="🔍 Поиск заметок..." oninput="searchNotes()">
+        </div>
+
+        <!-- Tags Filter -->
+        <div class="tags-filter">
+            <button class="tag-btn active" data-tag="all">Все</button>
+            <button class="tag-btn" data-tag="workout">💪 Тренировка</button>
+            <button class="tag-btn" data-tag="diet">🥗 Питание</button>
+            <button class="tag-btn" data-tag="health">❤️ Здоровье</button>
+            <button class="tag-btn" data-tag="goals">🎯 Цели</button>
+        </div>
+
+        <!-- Notes List -->
+        <section class="notes-section">
+            <div class="notes-list" id="notesList">
+                <!-- Notes will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="emptyNotes">
+            <span class="empty-icon">📝</span>
+            <h3>Нет заметок</h3>
+            <p>Создайте первую заметку о вашем прогрессе</p>
+        </div>
+
+        <!-- Add/Edit Note Modal -->
+        <div class="modal" id="noteModal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3 id="noteModalTitle">Новая заметка</h3>
+                    <button class="btn-close" onclick="closeNoteModal()">×</button>
+                </div>
+                <form id="noteForm" onsubmit="saveNote(event)">
+                    <input type="hidden" id="noteId">
+                    <div class="form-group">
+                        <label>Заголовок</label>
+                        <input type="text" id="noteTitle" required placeholder="Название заметки...">
+                    </div>
+                    <div class="form-group">
+                        <label>Категория</label>
+                        <select id="noteTag">
+                            <option value="workout">💪 Тренировка</option>
+                            <option value="diet">🥗 Питание</option>
+                            <option value="health">❤️ Здоровье</option>
+                            <option value="goals">🎯 Цели</option>
+                            <option value="other">📝 Другое</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Содержание</label>
+                        <textarea id="noteContent" rows="6" placeholder="Опишите ваши мысли..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Настроение</label>
+                        <div class="mood-selector">
+                            <button type="button" class="mood-btn" data-mood="5">😄</button>
+                            <button type="button" class="mood-btn" data-mood="4">🙂</button>
+                            <button type="button" class="mood-btn active" data-mood="3">😐</button>
+                            <button type="button" class="mood-btn" data-mood="2">😕</button>
+                            <button type="button" class="mood-btn" data-mood="1">😢</button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeNoteModal()">Отмена</button>
+                        <button type="submit" class="btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </a>
+            <a href="activity.html" class="nav-item">
+                <span class="nav-icon">👟</span>
+                <span class="nav-label">Активность</span>
+            </a>
+            <a href="notes.html" class="nav-item active">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Заметки</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Задачи</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Статистика</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNotesPage();
+        });
+    </script>
+</body>
+</html>

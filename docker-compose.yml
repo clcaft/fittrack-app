@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: smart-dashboard-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: node:20
+    container_name: smart-dashboard-backend
+    working_dir: /app/server
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && node server.js"
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: smart-dashboard-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrongPassword123!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:

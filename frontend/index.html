@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#11998e">
+    <title>FitTrack - Главная</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-content">
+                <h1>Привет, <span id="userName">Атлет</span>! 👋</h1>
+                <p class="date" id="currentDate">Сегодня, 2 апреля</p>
+            </div>
+            <div class="header-avatar" onclick="location.href='profile.html'">
+                <span>👤</span>
+            </div>
+        </header>
+
+        <!-- Daily Progress Card -->
+        <section class="progress-card">
+            <div class="progress-ring-container">
+                <svg class="progress-ring" viewBox="0 0 120 120">
+                    <circle class="progress-ring-bg" cx="60" cy="60" r="54"/>
+                    <circle class="progress-ring-fill" id="progressRing" cx="60" cy="60" r="54"/>
+                </svg>
+                <div class="progress-content">
+                    <span class="progress-percent" id="progressPercent">0%</span>
+                    <span class="progress-label">цель</span>
+                </div>
+            </div>
+            <div class="progress-info">
+                <h3>Цель дня</h3>
+                <p><span id="todaySteps">0</span> / <span id="dailyGoal">10000</span> шагов</p>
+            </div>
+        </section>
+
+        <!-- Quick Stats Grid -->
+        <section class="stats-grid">
+            <div class="stat-card primary" onclick="location.href='activity.html'">
+                <div class="stat-icon">👟</div>
+                <div class="stat-value" id="dashSteps">0</div>
+                <div class="stat-label">Шагов сегодня</div>
+                <div class="stat-trend up">+12%</div>
+            </div>
+            <div class="stat-card" onclick="location.href='activity.html'">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="dashCalories">0</div>
+                <div class="stat-label">Ккал</div>
+            </div>
+            <div class="stat-card" onclick="location.href='activity.html'">
+                <div class="stat-icon">📏</div>
+                <div class="stat-value" id="dashDistance">0.0</div>
+                <div class="stat-label">Км</div>
+            </div>
+            <div class="stat-card" onclick="location.href='activity.html'">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="dashTime">0</div>
+                <div class="stat-label">Минут</div>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="section-block">
+            <div class="section-header">
+                <h3>📊 Недавняя активность</h3>
+                <a href="activity.html" class="link-arrow">Все →</a>
+            </div>
+            <div class="activity-list" id="recentActivity">
+                <div class="empty-state">
+                    <span class="empty-icon">🏃</span>
+                    <p>Начните тренировку!</p>
+                    <button class="btn-primary" onclick="location.href='activity.html'">Начать</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Tasks Preview -->
+        <section class="section-block">
+            <div class="section-header">
+                <h3>✅ Задачи на сегодня</h3>
+                <a href="tasks.html" class="link-arrow">Все →</a>
+            </div>
+            <div class="tasks-preview" id="tasksPreview">
+                <div class="task-item-mini completed">
+                    <span class="task-check">✓</span>
+                    <span class="task-text">Утренняя зарядка</span>
+                </div>
+                <div class="task-item-mini">
+                    <span class="task-check"></span>
+                    <span class="task-text">10,000 шагов</span>
+                </div>
+                <div class="task-item-mini">
+                    <span class="task-check"></span>
+                    <span class="task-text">Выпить 2л воды</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <button class="action-btn large" onclick="location.href='activity.html'">
+                <span class="action-icon">▶</span>
+                <span>Начать тренировку</span>
+            </button>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </a>
+            <a href="activity.html" class="nav-item">
+                <span class="nav-icon">👟</span>
+                <span class="nav-label">Активность</span>
+            </a>
+            <a href="notes.html" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Заметки</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Задачи</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Статистика</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Инициализация главной страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDashboard();
+            updateDate();
+        });
+    </script>
+</body>
+</html>
