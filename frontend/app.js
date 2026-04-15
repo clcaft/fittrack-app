@@ -7,13 +7,85 @@
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
   const publicPages = ['auth.html', 'offline.html'];
 
-  if (!publicPages.includes(currentPage)) {
-    const token = localStorage.getItem('fittrack_token');
-    if (!token) {
-      window.location.href = '/auth.html';
-    }
+  if (publicPages.includes(currentPage)) return;
+
+  const token = localStorage.getItem('fittrack_token');
+  const guest = localStorage.getItem('fittrack_guest') === 'true';
+
+  if (!token && !guest) {
+    window.location.href = '/auth.html';
   }
 })();
+function applySavedUser() {
+  const savedUser = JSON.parse(localStorage.getItem('fittrack_user') || 'null');
+  if (savedUser?.name) {
+    App.data.user.name = savedUser.name;
+
+    const userNameEl = document.getElementById('userName');
+    if (userNameEl) userNameEl.textContent = savedUser.name;
+
+    const profileNameEl = document.getElementById('profileName');
+    if (profileNameEl) profileNameEl.textContent = savedUser.name;
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    DataManager.init();
+    applySavedUser();
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+        }
+        .hidden { display: none !important; }
+        .show { display: flex !important; }
+
+        [data-theme="light"] select,
+        [data-theme="light"] input,
+        [data-theme="light"] textarea {
+            background: #e8ecf1;
+            color: #1a1a2e;
+        }
+
+        [data-theme="light"] select option {
+            background: white;
+            color: #1a1a2e;
+        }
+
+        select, input, textarea {
+            color: var(--text-primary);
+        }
+
+        option {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] option {
+            background: white;
+            color: #1a1a2e;
+        }
+    `;
+    document.head.appendChild(style);
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '0');
+    svg.setAttribute('height', '0');
+    svg.innerHTML = `
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    `;
+    document.body.appendChild(svg);
+});
 function logout() {
   localStorage.removeItem('fittrack_token');
   localStorage.removeItem('fittrack_user');
@@ -1843,4 +1915,10 @@ if ('serviceWorker' in navigator) {
                 console.error('Ошибка регистрации Service Worker:', err);
             });
     });
+}
+function logout() {
+    localStorage.removeItem('fittrack_token');
+    localStorage.removeItem('fittrack_guest');
+    localStorage.removeItem('fittrack_user');
+    window.location.href = '/auth.html';
 }
