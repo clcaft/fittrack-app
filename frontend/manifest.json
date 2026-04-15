@@ -1,9 +1,12 @@
 {
-  "name": "Мой день",
-  "short_name": "Мой день",
-  "description": "Персональный дневник",
-  "start_url": "/",
+  "name": "FitTrack — Мой день",
+  "short_name": "FitTrack",
+  "description": "Трекер задач, заметок и активности",
+  "id": "/",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#007aff",
   "icons": [
@@ -26,14 +29,14 @@
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Главный экран на телефоне"
+      "label": "Главный экран"
     },
     {
       "src": "/1920.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Главный экран на компьютере"
+      "label": "Десктоп версия"
     }
   ]
 }
