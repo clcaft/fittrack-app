@@ -4,14 +4,6 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 
-const app = express();
-
-// Render сам подставит PORT
-const PORT = process.env.PORT || 4000;
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is not set');
 }
@@ -20,9 +12,9 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is not set');
 }
 
-// Если фронт и backend будут на одном домене через nginx/proxy,
-// CORS можно будет потом отключить.
-// Пока оставим безопасный и простой вариант.
+const app = express();
+const PORT = process.env.PORT || 4000;
+
 app.use(cors({
   origin: true,
   credentials: true
@@ -31,7 +23,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Простейшая проверка, что сервер живой
 app.get('/', (req, res) => {
   res.json({
     ok: true,
@@ -39,7 +30,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// Healthcheck для Render / проверки вручную
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     ok: true,
@@ -48,10 +38,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Роуты авторизации
 app.use('/api/auth', authRoutes);
 
-// Обработка несуществующих API маршрутов
 app.use('/api', (req, res) => {
   res.status(404).json({
     ok: false,
@@ -59,7 +47,6 @@ app.use('/api', (req, res) => {
   });
 });
 
-// Глобальный обработчик ошибок
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
 
