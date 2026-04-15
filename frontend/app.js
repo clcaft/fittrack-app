@@ -4,29 +4,35 @@
 
 
 (function checkAuth() {
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  const publicPages = ['auth.html', 'offline.html'];
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const publicPages = ['auth.html', 'offline.html'];
 
-  if (publicPages.includes(currentPage)) return;
+    if (publicPages.includes(currentPage)) return;
 
-  const token = localStorage.getItem('fittrack_token');
-  const guest = localStorage.getItem('fittrack_guest') === 'true';
+    const token = localStorage.getItem('fittrack_token');
+    const guest = localStorage.getItem('fittrack_guest') === 'true';
 
-  if (!token && !guest) {
-    window.location.href = '/auth.html';
-  }
+    if (!token && !guest) {
+        window.location.href = '/auth.html';
+    }
 })();
 function applySavedUser() {
-  const savedUser = JSON.parse(localStorage.getItem('fittrack_user') || 'null');
-  if (savedUser?.name) {
-    App.data.user.name = savedUser.name;
+    const savedUser = JSON.parse(localStorage.getItem('fittrack_user') || 'null');
+    if (!savedUser) return;
+
+    if (savedUser.name) {
+        App.data.user.name = savedUser.name;
+    }
 
     const userNameEl = document.getElementById('userName');
-    if (userNameEl) userNameEl.textContent = savedUser.name;
+    if (userNameEl && savedUser.name) {
+        userNameEl.textContent = savedUser.name;
+    }
 
     const profileNameEl = document.getElementById('profileName');
-    if (profileNameEl) profileNameEl.textContent = savedUser.name;
-  }
+    if (profileNameEl && savedUser.name) {
+        profileNameEl.textContent = savedUser.name;
+    }
 }
 document.addEventListener('DOMContentLoaded', () => {
     DataManager.init();
@@ -87,9 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(svg);
 });
 function logout() {
-  localStorage.removeItem('fittrack_token');
-  localStorage.removeItem('fittrack_user');
-  window.location.href = '/auth.html';
+    localStorage.removeItem('fittrack_token');
+    localStorage.removeItem('fittrack_guest');
+    localStorage.removeItem('fittrack_user');
+    window.location.href = '/auth.html';
 }
 // Глобальные переменные
 const App = {

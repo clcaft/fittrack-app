@@ -2,155 +2,225 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>FitTrack — Авторизация</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitTrack — Авторизация</title>
   <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#007aff" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: #f4f7fb;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
       padding: 16px;
-      box-sizing: border-box;
     }
 
     .container {
-      background: white;
-      padding: 24px;
-      border-radius: 12px;
       width: 100%;
-      max-width: 340px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      max-width: 360px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
-    h2 {
+    h1 {
+      margin: 0 0 8px;
       text-align: center;
+      font-size: 28px;
+      color: #111827;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
       margin-bottom: 20px;
+    }
+
+    .message {
+      min-height: 20px;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .message.error {
+      color: #dc2626;
+    }
+
+    .message.success {
+      color: #16a34a;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
     }
 
     input {
       width: 100%;
-      padding: 10px 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
       font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
     }
 
     button {
       width: 100%;
-      padding: 11px;
-      margin-top: 10px;
       border: none;
-      border-radius: 8px;
-      background: #007aff;
-      color: white;
+      border-radius: 10px;
+      padding: 12px 14px;
       font-size: 16px;
       cursor: pointer;
+      transition: 0.2s ease;
     }
 
-    button:hover {
-      opacity: 0.95;
+    .btn-primary {
+      background: #007aff;
+      color: white;
+      margin-top: 6px;
     }
 
-    .guest-btn {
-      background: #777;
+    .btn-primary:hover {
+      background: #0062cc;
     }
 
-    .switch {
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+
+    .switch-mode {
+      margin-top: 16px;
       text-align: center;
-      margin-top: 14px;
-      cursor: pointer;
+      font-size: 14px;
       color: #007aff;
-      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .error {
-      color: #d93025;
-      font-size: 14px;
-      text-align: center;
-      margin-top: 12px;
+    .switch-mode:hover {
+      text-decoration: underline;
     }
 
-    .success {
-      color: #188038;
-      font-size: 14px;
+    .divider {
+      margin: 16px 0 10px;
       text-align: center;
-      margin-top: 12px;
+      color: #9ca3af;
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2 id="title">Вход</h2>
+    <h1 id="formTitle">Вход</h1>
+    <div class="subtitle">FitTrack</div>
 
-    <input id="name" type="text" placeholder="Имя" style="display:none;" />
-    <input id="email" type="email" placeholder="Email" />
-    <input id="password" type="password" placeholder="Пароль" />
+    <div id="message" class="message"></div>
 
-    <button id="mainBtn" onclick="submitForm()">Войти</button>
-    <button class="guest-btn" onclick="loginAsGuest()">Войти как гость</button>
-
-    <div class="switch" onclick="toggleMode()" id="switchText">
-      Нет аккаунта? Регистрация
+    <div class="form-group" id="nameGroup" style="display: none;">
+      <input type="text" id="name" placeholder="Имя" />
     </div>
 
-    <div id="message"></div>
+    <div class="form-group">
+      <input type="email" id="email" placeholder="Email" />
+    </div>
+
+    <div class="form-group">
+      <input type="password" id="password" placeholder="Пароль" />
+    </div>
+
+    <button id="submitBtn" class="btn-primary" onclick="submitForm()">Войти</button>
+
+    <div class="divider">или</div>
+
+    <button class="btn-secondary" onclick="loginAsGuest()">Войти как гость</button>
+
+    <div class="switch-mode" id="switchMode" onclick="toggleMode()">
+      Нет аккаунта? Регистрация
+    </div>
   </div>
 
   <script>
     const API_BASE = 'https://fittrack-app-1-20ly.onrender.com/api/auth';
     let isLogin = true;
 
+    function setMessage(text, type = '') {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = 'message' + (type ? ' ' + type : '');
+    }
+
+    function clearMessage() {
+      setMessage('');
+    }
+
     function toggleMode() {
       isLogin = !isLogin;
 
-      document.getElementById('title').innerText = isLogin ? 'Вход' : 'Регистрация';
-      document.getElementById('mainBtn').innerText = isLogin ? 'Войти' : 'Зарегистрироваться';
-      document.getElementById('switchText').innerText = isLogin
+      document.getElementById('formTitle').textContent = isLogin ? 'Вход' : 'Регистрация';
+      document.getElementById('submitBtn').textContent = isLogin ? 'Войти' : 'Зарегистрироваться';
+      document.getElementById('switchMode').textContent = isLogin
         ? 'Нет аккаунта? Регистрация'
         : 'Уже есть аккаунт? Вход';
 
-      document.getElementById('name').style.display = isLogin ? 'none' : 'block';
-      document.getElementById('message').innerHTML = '';
+      document.getElementById('nameGroup').style.display = isLogin ? 'none' : 'block';
+      clearMessage();
     }
 
     async function submitForm() {
+      clearMessage();
+
+      const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
-      const name = document.getElementById('name').value.trim();
-      const message = document.getElementById('message');
-
-      message.innerHTML = '';
 
       if (!email || !password || (!isLogin && !name)) {
-        message.innerHTML = '<div class="error">Заполните все поля</div>';
+        setMessage('Заполните все поля', 'error');
         return;
       }
 
-      try {
-        const url = isLogin ? '/login' : '/register';
-        const body = isLogin
-          ? { email, password }
-          : { name, email, password };
+      const endpoint = isLogin ? '/login' : '/register';
+      const payload = isLogin
+        ? { email, password }
+        : { name, email, password };
 
-        const res = await fetch(API_BASE + url, {
+      try {
+        const response = await fetch(API_BASE + endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
+        let data = {};
+        try {
+          data = await response.json();
+        } catch (e) {
+          data = {};
+        }
 
-        if (!res.ok || !data.ok) {
-          message.innerHTML = `<div class="error">${data.error || 'Ошибка'}</div>`;
+        if (!response.ok) {
+          setMessage(data.error || 'Ошибка запроса', 'error');
           return;
         }
 
@@ -158,21 +228,23 @@
           localStorage.setItem('fittrack_token', data.token || '');
           localStorage.setItem('fittrack_guest', 'false');
           localStorage.setItem('fittrack_user', JSON.stringify(
-            data.user || { name: 'Пользователь', email }
+            data.user || { name: name || 'Пользователь', email }
           ));
 
-          message.innerHTML = '<div class="success">Успешный вход</div>';
+          setMessage('Успешный вход', 'success');
 
           setTimeout(() => {
             window.location.href = '/index.html';
           }, 700);
         } else {
-          message.innerHTML = '<div class="success">Регистрация успешна. Теперь войдите.</div>';
+          setMessage('Регистрация успешна. Теперь войдите.', 'success');
           toggleMode();
+
+          document.getElementById('password').value = '';
         }
-      } catch (err) {
-        console.error(err);
-        message.innerHTML = '<div class="error">Сервер недоступен</div>';
+      } catch (error) {
+        console.error('Auth error:', error);
+        setMessage('Сервер недоступен. Попробуйте ещё раз через несколько секунд.', 'error');
       }
     }
 
@@ -185,6 +257,15 @@
 
       window.location.href = '/index.html';
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('fittrack_token');
+      const guest = localStorage.getItem('fittrack_guest') === 'true';
+
+      if (token || guest) {
+        window.location.href = '/index.html';
+      }
+    });
   </script>
 </body>
 </html>
